@@ -50,7 +50,7 @@ class Anonymizer
                 if (is_object($value) || is_array($value)) {
                     $anonymizedData->$key = $this->anonymize($value);
                 } else {
-                    if (in_array(strtolower($key), $this->keys)) {
+                    if (in_array(strtolower(str_replace('[]', '', $key)), $this->keys)) {
                         $anonymizedData->$key = $this->anonymizeValue($value);
                     } else {
                         $anonymizedData->$key = $this->anonymize($value);
@@ -61,13 +61,17 @@ class Anonymizer
         } elseif (is_array($data)) {
             $result = [];
             foreach ($data as $key => $value) {
-                if (is_object($value) || is_array($value)) {
-                    $result[$key] = $this->anonymize($value);
+                if (is_array($value) && in_array(strtolower($key . '[]'), $this->keys)) {
+                    $result[$key] = $this->anonymizeArray($value);
                 } else {
-                    if (in_array(strtolower($key), $this->keys)) {
-                        $result[$key] = $this->anonymizeValue($value);
-                    } else {
+                    if (is_object($value) || is_array($value)) {
                         $result[$key] = $this->anonymize($value);
+                    } else {
+                        if (in_array(strtolower($key), $this->keys)) {
+                            $result[$key] = $this->anonymizeValue($value);
+                        } else {
+                            $result[$key] = $this->anonymize($value);
+                        }
                     }
                 }
             }
@@ -103,5 +107,18 @@ class Anonymizer
             $anonymizedNumber .= rand(0, 9);
         }
         return is_float($value) ? (float)$anonymizedNumber : (int)$anonymizedNumber;
+    }
+
+    /**
+     * Anonymize an array
+     * @param array $value
+     */
+    private function anonymizeArray(array $value): array
+    {
+        $anonymizedArray = [];
+        foreach ($value as $item) {
+            $anonymizedArray[] = $this->anonymizeValue($item);
+        }
+        return $anonymizedArray;
     }
 }

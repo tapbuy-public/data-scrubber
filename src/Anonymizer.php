@@ -2,18 +2,26 @@
 
 namespace Tapbuy\DataScrubber;
 
-class DataScrubber
+class Anonymizer
 {
     private $keys;
     private $url;
 
+    /**
+     * Fetch keys from the API
+     * @param string $url
+     */
     public function __construct(string $url)
     {
         $this->url = $url;
         $this->fetchKeys();
     }
 
-    private function fetchKeys()
+    /**
+     * Fetch keys from the API
+     * @return void
+     */
+    private function fetchKeys(): void
     {
         // @todo: improve this with a local copy and a cron job to update it
         $curl = curl_init();
@@ -38,12 +46,20 @@ class DataScrubber
         curl_close($curl);
     }
 
+    /**
+     * Anonymize an object or array recursively
+     * @param object|array $data
+     */
     public function anonymizeObject(object|array $data): object|array
     {
         return $this->anonymize($data);
     }
 
-    private function anonymize($data)
+    /**
+     * Anonymize a key in an object or array if matches the keys from the API
+     * @param mixed $data
+     */
+    private function anonymize(mixed $data): mixed
     {
         if (is_object($data)) {
             $anonymizedData = new \stdClass();
@@ -78,7 +94,11 @@ class DataScrubber
         }
     }
 
-    private function anonymizeValue($value)
+    /**
+     * Anonymize a string keeping the length and the type
+     * @param mixed $value
+     */
+    private function anonymizeValue(mixed $value): mixed
     {
         if (is_string($value)) {
             return str_repeat('*', strlen($value));
@@ -88,7 +108,11 @@ class DataScrubber
         return $value;
     }
 
-    private function anonymizeNumeric($value)
+    /**
+     * Anonymize a numeric value keeping the length
+     * @param int|float $value
+     */
+    private function anonymizeNumeric(int|float $value): int|float
     {
         $length = strlen((string)$value);
         $anonymizedNumber = '';

@@ -15,7 +15,7 @@ class DataScrubber
 
     private function fetchKeys()
     {
-        
+        // @todo: improve this with a local copy and a cron job to update it
         $curl = curl_init();
 
         curl_setopt($curl, CURLOPT_URL, $this->url);

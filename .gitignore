@@ -1,0 +1,9 @@
+/vendor/
+/.idea/
+.project
+.buildpath
+.settings/
+*.sublime-*
+*.code-*
+.vscode/
+.DS_Store

@@ -1,6 +1,7 @@
 <?php
 
 namespace Tapbuy\DataScrubber;
+use Tapbuy\DataScrubber\Keys;
 
 class Anonymizer
 {
@@ -14,36 +15,18 @@ class Anonymizer
     public function __construct(string $url)
     {
         $this->url = $url;
-        $this->fetchKeys();
+        $this->keys = [];
+        $this->setKeys();
     }
 
     /**
-     * Fetch keys from the API
+     * Set the keys to anonymize
      * @return void
      */
-    private function fetchKeys(): void
+    private function setKeys(): void
     {
-        // @todo: improve this with a local copy and a cron job to update it
-        $curl = curl_init();
-
-        curl_setopt($curl, CURLOPT_URL, $this->url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-
-        $response = curl_exec($curl);
-
-        if($response !== false) {
-            $json = json_decode($response, true);
-            if ($json['success'] === true) {
-                $this->keys = $json['data'];
-            } else {
-                throw new \Exception('Failed to load keys');
-            }
-        } else {
-            throw new \Exception('Failed to load keys');
-        }
-
-        curl_close($curl);
+        $keys = new Keys($this->url);
+        $this->keys = $keys->getKeys();
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 
 namespace Tapbuy\DataScrubber;
+
 use Tapbuy\DataScrubber\Keys;
 
 class Anonymizer
@@ -42,7 +43,7 @@ class Anonymizer
      * Anonymize a key in an object or array if matches the keys from the API
      * @param mixed $data
      */
-    private function anonymize(mixed $data): mixed
+    public function anonymize(mixed $data): mixed
     {
         if (is_object($data)) {
             $anonymizedData = new \stdClass();
@@ -85,7 +86,7 @@ class Anonymizer
      * Anonymize a string keeping the length and the type
      * @param mixed $value
      */
-    private function anonymizeValue(mixed $value): mixed
+    public function anonymizeValue(mixed $value): mixed
     {
         if (is_string($value)) {
             return str_repeat('*', strlen($value));
@@ -99,7 +100,7 @@ class Anonymizer
      * Anonymize a numeric value keeping the length
      * @param int|float $value
      */
-    private function anonymizeNumeric(int|float $value): int|float
+    public function anonymizeNumeric(int|float $value): int|float
     {
         $length = strlen((string)$value);
         $anonymizedNumber = '';
@@ -113,7 +114,7 @@ class Anonymizer
      * Anonymize an array
      * @param array $value
      */
-    private function anonymizeArray(array $value): array
+    public function anonymizeArray(array $value): array
     {
         $anonymizedArray = [];
         foreach ($value as $item) {

@@ -21,6 +21,16 @@ class Anonymizer
     }
 
     /**
+     * Update the keys
+     */
+    public function updateKeys(): void
+    {
+        $keys = new Keys($this->url);
+        $keys->fetchKeys();
+        $this->setKeys();
+    }
+
+    /**
      * Set the keys to anonymize
      * @return void
      */

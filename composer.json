@@ -2,7 +2,7 @@
     "name" : "tapbuy/data-scrubber",
     "description": "A tool to help with scrubbing sensitive data",
     "type": "library",
-	"version" : "0.6",
+	"version" : "0.7.0",
 	"license" : "Apache-2.0",
     "require": {
         "php": ">=8.1"

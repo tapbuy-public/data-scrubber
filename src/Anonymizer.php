@@ -78,7 +78,7 @@ class Anonymizer
                     if (is_object($value) || is_array($value)) {
                         $result[$key] = $this->anonymize($value);
                     } else {
-                        if (in_array(strtolower($key), $this->keys)) {
+                        if (in_array(strtolower($key), $this->keys) || in_array($key, $this->keys)) {
                             $result[$key] = $this->anonymizeValue($value);
                         } else {
                             $result[$key] = $this->anonymize($value);
